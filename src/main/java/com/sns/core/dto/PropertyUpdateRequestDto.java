@@ -1,32 +1,23 @@
-package com.sns.core.model;
+package com.sns.core.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.sns.core.model.Appliance;
+import com.sns.core.model.Floor;
+import com.sns.core.model.Parking;
 
+import java.io.Serializable;
 import java.util.List;
-@Document(collection = "houses")
-public class House {
-    @Id
-    private String id;
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String state;
-    private String zipCode;
+
+public class PropertyUpdateRequestDto implements Serializable {
     private String propertyType;
     private String size;
     private String yom;
-    private Integer noBedRooms;
-    private Integer noBathRooms;
+    private Integer noOfBedRooms;
+    private Integer noOfBathRooms;
     private String contactName;
     private String email;
     private String phoneNo;
-    @DBRef
     private List<Appliance> appliances;
-    @DBRef
     private List<Floor> floors;
-    @DBRef
     private List<Parking> parkingTypes;
     private String listingSummery;
     private String payment;
@@ -36,69 +27,6 @@ public class House {
     private String renter;
     private List<String> interestedRentees;
 
-    public String getRenter() {
-        return renter;
-    }
-
-    public List<String> getInterestedRentees() {
-        return interestedRentees;
-    }
-
-    public void setRenter(String renter) {
-        this.renter = renter;
-    }
-
-    public void setInterestedRentees(List<String> interestedRentees) {
-        this.interestedRentees = interestedRentees;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAddressLine1() {
-        return addressLine1;
-    }
-
-    public void setAddressLine1(String addressLine1) {
-        this.addressLine1 = addressLine1;
-    }
-
-    public String getAddressLine2() {
-        return addressLine2;
-    }
-
-    public void setAddressLine2(String addressLine2) {
-        this.addressLine2 = addressLine2;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
 
     public String getPropertyType() {
         return propertyType;
@@ -124,20 +52,20 @@ public class House {
         this.yom = yom;
     }
 
-    public Integer getNoBedRooms() {
-        return noBedRooms;
+    public Integer getNoOfBedRooms() {
+        return noOfBedRooms;
     }
 
-    public void setNoBedRooms(Integer noBedRooms) {
-        this.noBedRooms = noBedRooms;
+    public void setNoOfBedRooms(Integer noOfBedRooms) {
+        this.noOfBedRooms = noOfBedRooms;
     }
 
-    public Integer getNoBathRooms() {
-        return noBathRooms;
+    public Integer getNoOfBathRooms() {
+        return noOfBathRooms;
     }
 
-    public void setNoBathRooms(Integer noBathRooms) {
-        this.noBathRooms = noBathRooms;
+    public void setNoOfBathRooms(Integer noOfBathRooms) {
+        this.noOfBathRooms = noOfBathRooms;
     }
 
     public String getContactName() {
@@ -225,7 +153,22 @@ public class House {
     }
 
     public void setListingDescription(String listingDescription) {
-        this.listingDescription = listingDescription;    }
+        this.listingDescription = listingDescription;
+    }
 
+    public String getRenter() {
+        return renter;
+    }
 
+    public void setRenter(String renter) {
+        this.renter = renter;
+    }
+
+    public List<String> getInterestedRentees() {
+        return interestedRentees;
+    }
+
+    public void setInterestedRentees(List<String> interestedRentees) {
+        this.interestedRentees = interestedRentees;
+    }
 }

@@ -1,12 +1,12 @@
 package com.sns.core.controller;
 
+import com.sns.core.dto.PropertyStageOneRequestDto;
+import com.sns.core.dto.PropertyUpdateRequestDto;
 import com.sns.core.model.House;
 import com.sns.core.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,7 +18,22 @@ public class PropertyController {
     private PropertyService propertyService;
 
     @GetMapping("/{renterId}")
-    public List<House> getAllPropertiesByRenterId(@PathVariable String renterId) {
-        return propertyService.getHouseByRenterId(renterId);
+    public List<House> getAllPropertiesByRenterId(@PathVariable String renterId, Pageable pageable) {
+        return propertyService.getHouseByRenterId(renterId, pageable);
+    }
+
+    @GetMapping
+    public List<House> getAllProperties(Pageable pageable) {
+        return propertyService.getAllHouses(pageable);
+    }
+
+    @PostMapping
+    public House addProperty(@RequestBody PropertyStageOneRequestDto propertyDto) {
+        return propertyService.addPropertyTOCustomer(propertyDto);
+    }
+
+    @PutMapping("/{propertyId}")
+    public House updateProperty(@PathVariable String propertyId,@RequestBody PropertyUpdateRequestDto propertyDto) {
+        return propertyService.updatePropertyData(propertyId,propertyDto);
     }
 }

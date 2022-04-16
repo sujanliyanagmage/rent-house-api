@@ -1,13 +1,13 @@
-package com.sns.core.user.service;
+package com.sns.core.service;
 
 import java.util.List;
 
-import com.sns.core.user.model.User;
+import com.sns.core.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sns.core.user.repository.UserRepository;
+import com.sns.core.repository.UserRepository;
 
 @Service
 public class UserService {

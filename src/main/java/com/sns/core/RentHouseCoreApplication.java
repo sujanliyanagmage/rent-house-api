@@ -4,6 +4,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sns.core.model.House;
+import com.sns.core.repository.ApplianceRepository;
+import com.sns.core.repository.FloorRepository;
+import com.sns.core.repository.ParkingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,14 +15,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.sns.core.user.model.User;
-import com.sns.core.user.repository.UserRepository;
+import com.sns.core.model.User;
+import com.sns.core.repository.UserRepository;
 
 @SpringBootApplication
 public class RentHouseCoreApplication implements CommandLineRunner {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private ApplianceRepository applianceRepository;
+
+	@Autowired
+	private FloorRepository floorRepository;
+
+	@Autowired
+	private ParkingRepository parkingRepository;
 
 	@Lazy
 	@Autowired
@@ -36,7 +49,24 @@ public class RentHouseCoreApplication implements CommandLineRunner {
 			ArrayList<User> collect = Stream.of(user, user2)
 					.collect(Collectors.toCollection(ArrayList::new));
 			this.userRepository.saveAll(collect);
+
 		}
+
+//		applianceRepository.save(new Appliance("Dryer"));
+//		applianceRepository.save(new Appliance("Garbage Disposal"));
+//		applianceRepository.save(new Appliance("Trash Compactor"));
+//		applianceRepository.save(new Appliance("Refrigerator"));
+//		applianceRepository.save(new Appliance("Freezer"));
+//		applianceRepository.save(new Appliance("Microwave"));
+//		applianceRepository.save(new Appliance("Washer"));
+//
+//		parkingRepository.save(new Parking("outdoor"));
+//		parkingRepository.save(new Parking("2 slots"));
+//		parkingRepository.save(new Parking("no parking"));
+//
+//		floorRepository.save(new Floor("carpet"));
+//		floorRepository.save(new Floor("wooden floor"));
+//		floorRepository.save(new Floor("cement floor"));
 	}
 
 }

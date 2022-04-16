@@ -1,9 +1,9 @@
-package com.sns.core.user.controller;
+package com.sns.core.controller;
 
 import java.util.List;
 
-import com.sns.core.user.model.User;
-import com.sns.core.user.service.UserService;
+import com.sns.core.model.User;
+import com.sns.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

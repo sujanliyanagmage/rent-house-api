@@ -1,4 +1,4 @@
-package com.sns.core.user.model;
+package com.sns.core.model;
 
 import java.util.List;
 

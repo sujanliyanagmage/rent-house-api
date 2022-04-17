@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+
 @Document(collection = "houses")
 public class House {
     @Id
@@ -30,22 +31,23 @@ public class House {
     private List<Parking> parkingTypes;
     private String listingSummery;
     private String payment;
-    private String photosPath;
-    private String videosPath;
+    private List<String> photosPath;
+    private List<String> videosPath;
     private String listingDescription;
     private String renter;
     private List<String> interestedRentees;
+    private String refVideoLink;
 
     public String getRenter() {
         return renter;
     }
 
-    public List<String> getInterestedRentees() {
-        return interestedRentees;
-    }
-
     public void setRenter(String renter) {
         this.renter = renter;
+    }
+
+    public List<String> getInterestedRentees() {
+        return interestedRentees;
     }
 
     public void setInterestedRentees(List<String> interestedRentees) {
@@ -204,19 +206,19 @@ public class House {
         this.payment = payment;
     }
 
-    public String getPhotosPath() {
+    public List<String> getPhotosPath() {
         return photosPath;
     }
 
-    public void setPhotosPath(String photosPath) {
+    public void setPhotosPath(List<String> photosPath) {
         this.photosPath = photosPath;
     }
 
-    public String getVideosPath() {
+    public List<String> getVideosPath() {
         return videosPath;
     }
 
-    public void setVideosPath(String videosPath) {
+    public void setVideosPath(List<String> videosPath) {
         this.videosPath = videosPath;
     }
 
@@ -225,7 +227,14 @@ public class House {
     }
 
     public void setListingDescription(String listingDescription) {
-        this.listingDescription = listingDescription;    }
+        this.listingDescription = listingDescription;
+    }
 
+    public String getRefVideoLink() {
+        return refVideoLink;
+    }
 
+    public void setRefVideoLink(String refVideoLink) {
+        this.refVideoLink = refVideoLink;
+    }
 }

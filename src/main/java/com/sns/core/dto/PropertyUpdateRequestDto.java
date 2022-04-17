@@ -26,6 +26,7 @@ public class PropertyUpdateRequestDto implements Serializable {
     private String listingDescription;
     private String renter;
     private List<String> interestedRentees;
+    private String refVideoLink;
 
 
     public String getPropertyType() {
@@ -170,5 +171,13 @@ public class PropertyUpdateRequestDto implements Serializable {
 
     public void setInterestedRentees(List<String> interestedRentees) {
         this.interestedRentees = interestedRentees;
+    }
+
+    public String getRefVideoLink() {
+        return refVideoLink;
+    }
+
+    public void setRefVideoLink(String refVideoLink) {
+        this.refVideoLink = refVideoLink;
     }
 }

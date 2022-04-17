@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,12 +36,12 @@ public class PropertyController {
     }
 
     @PostMapping("{propertyId}/upload/images")
-    public ResponseEntity<?> imageFileUpload(@PathVariable String propertyId, @RequestParam("file") List<MultipartFile> files) {
+    public ResponseEntity<?> imageFileUpload(@PathVariable String propertyId, @RequestParam("file") List<MultipartFile> files) throws IOException {
         return propertyService.uploadImagesToCustomerProperty(propertyId, files);
     }
 
     @PostMapping("{propertyId}/upload/videos")
-    public ResponseEntity<?> videoFileUpload(@PathVariable String propertyId, @RequestParam("file") List<MultipartFile> files) {
+    public ResponseEntity<?> videoFileUpload(@PathVariable String propertyId, @RequestParam("file") List<MultipartFile> files) throws IOException {
         return propertyService.uploadVideosToCustomerProperty(propertyId, files);
     }
 

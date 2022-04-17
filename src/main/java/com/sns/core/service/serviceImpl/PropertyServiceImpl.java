@@ -11,16 +11,19 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,10 +89,10 @@ public class PropertyServiceImpl implements PropertyService {
     private void uploadFiles(String path, String uploadType, String propertyId, List<MultipartFile> multipartFile) {
         List<String> uploadedFilePaths = new ArrayList<>();
         multipartFile.forEach(file -> {
-            String fileName = file.getName();
+            String fileName = file.getOriginalFilename();
             try {
-                Files.createDirectories(Paths.get(path));
-                file.transferTo(new File(path + fileName));
+                Path directories = Files.createDirectories(Paths.get(path));
+                file.transferTo(new File("C:\\upload\\" + fileName));
                 uploadedFilePaths.add(path + fileName);
             } catch (Exception e) {
                 throw new InternalError();
@@ -115,6 +118,6 @@ public class PropertyServiceImpl implements PropertyService {
             String currentUserName = authentication.getName();
             return userRepository.findByUsername(currentUserName);
         }
-        return null;
+        throw new UsernameNotFoundException("--");
     }
 }

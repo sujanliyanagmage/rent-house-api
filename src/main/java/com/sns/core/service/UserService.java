@@ -27,4 +27,8 @@ public class UserService {
 		return this.userRepository.findAll();
 	}
 
+	public User getUserDetailsByUserName(String userName){
+		return this.userRepository.findByUsername(userName);
+	}
+
 }

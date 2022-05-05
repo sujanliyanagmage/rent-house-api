@@ -11,6 +11,7 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,9 @@ public class PropertyServiceImpl implements PropertyService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public List<House> getHouseByRenterId(String renterId, Pageable pageable) {
         return houseRepository.findHouseByRenter(renterId, pageable);
@@ -72,7 +76,7 @@ public class PropertyServiceImpl implements PropertyService {
     public ResponseEntity<?> uploadImagesToCustomerProperty(String propertyId, List<MultipartFile> multipartFile) {
 
         User loginUserDetails = getLoginUserDetails();
-        String path = loginUserDetails.getId() + "\\" + propertyId + "\\videos\\";
+        String path = loginUserDetails.getId() + "\\" + propertyId + "\\images\\";
         uploadFiles(path, IMAGE, propertyId, multipartFile);
         return ResponseEntity.ok("File uploaded successfully.");
     }
@@ -91,9 +95,12 @@ public class PropertyServiceImpl implements PropertyService {
         multipartFile.forEach(file -> {
             String fileName = file.getOriginalFilename();
             try {
-                Path directories = Files.createDirectories(Paths.get(path));
-                file.transferTo(new File("C:\\upload\\" + fileName));
-                uploadedFilePaths.add(path + fileName);
+                Path storageLocation = Paths.get(env.getProperty("app.file.upload-dir", "./uploads/files/"))
+                        .toAbsolutePath().normalize();
+                String fileUploadedLPath = storageLocation +"\\"+path;
+                Files.createDirectories(Paths.get(fileUploadedLPath));
+                file.transferTo(new File(fileUploadedLPath+ fileName));
+                uploadedFilePaths.add(storageLocation + path + fileName);
             } catch (Exception e) {
                 throw new InternalError();
             }

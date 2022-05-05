@@ -34,7 +34,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
-				.withClient("rokin-client")
+				.withClient("renter-app")
 				.secret(passwordEncoder.encode("secret"))
 				.authorizedGrantTypes("password", "client_credentials", "refresh_token")
 				.scopes("all")

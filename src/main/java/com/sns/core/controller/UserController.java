@@ -21,8 +21,8 @@ public class UserController {
     }
 
     @GetMapping("/user/me")
-    public User getUserDetails(@RequestBody String userName) {
-        return this.userService.getUserDetailsByUserName(userName);
+    public User getUserDetails() {
+        return this.userService.getUserDetailsByUserName();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

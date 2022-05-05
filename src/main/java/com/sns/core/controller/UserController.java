@@ -20,7 +20,7 @@ public class UserController {
         return this.userService.saveUser(user);
     }
 
-    @GetMapping("/user/me")
+    @GetMapping("/me")
     public User getUserDetails() {
         return this.userService.getUserDetailsByUserName();
     }

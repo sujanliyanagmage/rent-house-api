@@ -1,5 +1,6 @@
 package com.sns.core.service.serviceImpl;
 
+import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.PropertyUpdateRequestDto;
 import com.sns.core.model.House;
@@ -7,12 +8,13 @@ import com.sns.core.model.User;
 import com.sns.core.repository.HouseRepository;
 import com.sns.core.repository.UserRepository;
 import com.sns.core.service.PropertyService;
+import com.sns.core.util.PropertyStatus;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -27,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -52,13 +55,21 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<House> getAllHouses(Pageable pageable) {
-        return houseRepository.findAll(pageable).getContent();
+    public PropertyResponseDto getAllHouses(Pageable pageable) {
+        PropertyResponseDto propertyResponseDto= new PropertyResponseDto();
+        Page<House> all = houseRepository.findAll(pageable);
+        List<House> content = all.getContent();
+        int totalPages = all.getTotalPages();
+        propertyResponseDto.setData(content);
+        propertyResponseDto.setPageCount(totalPages);
+        return propertyResponseDto;
     }
 
     @Override
     public House addPropertyTOCustomer(PropertyStageOneRequestDto propertyDto) {
         House house = modelMapper.map(propertyDto, House.class);
+        house.setStatus(PropertyStatus.AVAILABLE);
+        house.setPostedDate(new Date());
         return houseRepository.save(house);
     }
 

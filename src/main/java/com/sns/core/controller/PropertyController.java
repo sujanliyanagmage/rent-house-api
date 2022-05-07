@@ -1,5 +1,6 @@
 package com.sns.core.controller;
 
+import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.PropertyUpdateRequestDto;
 import com.sns.core.model.House;
@@ -26,7 +27,7 @@ public class PropertyController {
     }
 
     @GetMapping
-    public List<House> getAllProperties(Pageable pageable) {
+    public PropertyResponseDto getAllProperties(Pageable pageable) {
         return propertyService.getAllHouses(pageable);
     }
 

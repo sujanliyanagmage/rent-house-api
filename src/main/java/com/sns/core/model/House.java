@@ -1,9 +1,11 @@
 package com.sns.core.model;
 
+import com.sns.core.util.PropertyStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "houses")
@@ -37,6 +39,25 @@ public class House {
     private String renter;
     private List<String> interestedRentees;
     private String refVideoLink;
+
+    public Date getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(Date postedDate) {
+        this.postedDate = postedDate;
+    }
+
+    public PropertyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PropertyStatus status) {
+        this.status = status;
+    }
+
+    private Date postedDate;
+    private PropertyStatus status;
 
     public String getRenter() {
         return renter;

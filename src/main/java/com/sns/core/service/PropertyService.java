@@ -1,5 +1,6 @@
 package com.sns.core.service;
 
+import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.PropertyUpdateRequestDto;
 import com.sns.core.model.House;
@@ -13,7 +14,7 @@ public interface PropertyService {
 
     List<House> getHouseByRenterId(String renterId, Pageable pageable);
 
-    List<House> getAllHouses(Pageable pageable);
+    PropertyResponseDto getAllHouses(Pageable pageable);
 
     House addPropertyTOCustomer(PropertyStageOneRequestDto propertyDto);
 

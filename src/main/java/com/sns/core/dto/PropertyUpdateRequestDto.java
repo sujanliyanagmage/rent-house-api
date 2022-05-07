@@ -16,9 +16,34 @@ public class PropertyUpdateRequestDto implements Serializable {
     private String contactName;
     private String email;
     private String phoneNo;
-    private List<Appliance> appliances;
-    private List<Floor> floors;
-    private List<Parking> parkingTypes;
+
+    public List<String> getAppliances() {
+        return appliances;
+    }
+
+    public void setAppliances(List<String> appliances) {
+        this.appliances = appliances;
+    }
+
+    public List<String> getFloors() {
+        return floors;
+    }
+
+    public void setFloors(List<String> floors) {
+        this.floors = floors;
+    }
+
+    public List<String> getParkingTypes() {
+        return parkingTypes;
+    }
+
+    public void setParkingTypes(List<String> parkingTypes) {
+        this.parkingTypes = parkingTypes;
+    }
+
+    private List<String> appliances;
+    private List<String> floors;
+    private List<String> parkingTypes;
     private String listingSummery;
     private String payment;
     private String photosPath;
@@ -93,29 +118,6 @@ public class PropertyUpdateRequestDto implements Serializable {
         this.phoneNo = phoneNo;
     }
 
-    public List<Appliance> getAppliances() {
-        return appliances;
-    }
-
-    public void setAppliances(List<Appliance> appliances) {
-        this.appliances = appliances;
-    }
-
-    public List<Floor> getFloors() {
-        return floors;
-    }
-
-    public void setFloors(List<Floor> floors) {
-        this.floors = floors;
-    }
-
-    public List<Parking> getParkingTypes() {
-        return parkingTypes;
-    }
-
-    public void setParkingTypes(List<Parking> parkingTypes) {
-        this.parkingTypes = parkingTypes;
-    }
 
     public String getListingSummery() {
         return listingSummery;

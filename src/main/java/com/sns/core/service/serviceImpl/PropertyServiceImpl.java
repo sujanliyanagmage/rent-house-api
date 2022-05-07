@@ -3,10 +3,8 @@ package com.sns.core.service.serviceImpl;
 import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.PropertyUpdateRequestDto;
-import com.sns.core.model.House;
-import com.sns.core.model.User;
-import com.sns.core.repository.HouseRepository;
-import com.sns.core.repository.UserRepository;
+import com.sns.core.model.*;
+import com.sns.core.repository.*;
 import com.sns.core.service.PropertyService;
 import com.sns.core.util.PropertyStatus;
 import org.modelmapper.Conditions;
@@ -49,6 +47,15 @@ public class PropertyServiceImpl implements PropertyService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private FloorRepository floorRepository;
+
+    @Autowired
+    private ParkingRepository parkingRepository;
+
+    @Autowired
+    private ApplianceRepository applianceRepository;
+
     @Override
     public List<House> getHouseByRenterId(String renterId, Pageable pageable) {
         return houseRepository.findHouseByRenter(renterId, pageable);
@@ -56,7 +63,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyResponseDto getAllHouses(Pageable pageable) {
-        PropertyResponseDto propertyResponseDto= new PropertyResponseDto();
+        PropertyResponseDto propertyResponseDto = new PropertyResponseDto();
         Page<House> all = houseRepository.findAll(pageable);
         List<House> content = all.getContent();
         int totalPages = all.getTotalPages();
@@ -80,6 +87,19 @@ public class PropertyServiceImpl implements PropertyService {
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         modelMapper.map(propertyDto, houseById);
         houseById.setRenter(userId);
+
+        List<Floor> floors = floorRepository.findAllByIdIn(propertyDto.getFloors());
+        if (floors != null && floors.size() > 0) {
+            houseById.setFloors(floors);
+        }
+        List<Appliance> appliances = applianceRepository.findAllByIdIn(propertyDto.getAppliances());
+        if (appliances != null && appliances.size() > 0) {
+            houseById.setAppliances(appliances);
+        }
+        List<Parking> parkings = parkingRepository.findAllByIdIn(propertyDto.getParkingTypes());
+        if (parkings != null && parkings.size() > 0) {
+            houseById.setParkingTypes(parkings);
+        }
         return houseRepository.save(houseById);
     }
 
@@ -108,9 +128,9 @@ public class PropertyServiceImpl implements PropertyService {
             try {
                 Path storageLocation = Paths.get(env.getProperty("app.file.upload-dir", "./uploads/files/"))
                         .toAbsolutePath().normalize();
-                String fileUploadedLPath = storageLocation +"\\"+path;
+                String fileUploadedLPath = storageLocation + "\\" + path;
                 Files.createDirectories(Paths.get(fileUploadedLPath));
-                file.transferTo(new File(fileUploadedLPath+ fileName));
+                file.transferTo(new File(fileUploadedLPath + fileName));
                 uploadedFilePaths.add(storageLocation + path + fileName);
             } catch (Exception e) {
                 throw new InternalError();

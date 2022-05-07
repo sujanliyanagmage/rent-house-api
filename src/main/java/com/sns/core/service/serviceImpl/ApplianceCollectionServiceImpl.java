@@ -39,15 +39,15 @@ public class ApplianceCollectionServiceImpl implements ApplianceCollectionServic
         //Gets all parking details.
         CategoryDto dto1 = new CategoryDto();
         List<Parking> all1 = parkingRepository.findAll();
-        dto.setTitle("Parking");
-        dto.setFeatures(all1);
+        dto1.setTitle("Parking");
+        dto1.setFeatures(all1);
         categoryDtos.add(dto1);
 
         //Gets all appliance details.
         CategoryDto dto2 = new CategoryDto();
         List<Appliance> all2 = applianceRepository.findAll();
-        dto.setTitle("Appliance");
-        dto.setFeatures(all2);
+        dto2.setTitle("Appliance");
+        dto2.setFeatures(all2);
         categoryDtos.add(dto2);
 
         applianceCollectionDto.setCategories(categoryDtos);

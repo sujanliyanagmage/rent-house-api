@@ -30,4 +30,7 @@ public class Parking implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Parking() {
+    }
 }

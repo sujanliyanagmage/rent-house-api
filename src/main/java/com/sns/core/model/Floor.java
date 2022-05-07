@@ -30,4 +30,7 @@ public class Floor implements Serializable {
     public Floor(String name) {
         this.name = name;
     }
+
+    public Floor() {
+    }
 }

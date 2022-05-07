@@ -31,4 +31,7 @@ public class Appliance implements Serializable {
     public Appliance(String name) {
         this.name = name;
     }
+
+    public Appliance() {
+    }
 }

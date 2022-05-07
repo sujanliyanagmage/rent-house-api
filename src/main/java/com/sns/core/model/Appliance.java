@@ -3,8 +3,10 @@ package com.sns.core.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Document("appliance")
-public class Appliance {
+public class Appliance implements Serializable {
     @Id
     private String id;
 

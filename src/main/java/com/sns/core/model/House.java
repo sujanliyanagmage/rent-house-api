@@ -5,11 +5,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Document(collection = "houses")
-public class House {
+public class House implements Serializable {
     @Id
     private String id;
     private String addressLine1;

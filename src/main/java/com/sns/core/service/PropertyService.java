@@ -4,6 +4,7 @@ import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.PropertyUpdateRequestDto;
 import com.sns.core.model.House;
+import com.sns.core.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,4 +24,6 @@ public interface PropertyService {
     ResponseEntity<?> uploadImagesToCustomerProperty(String propertyId, List<MultipartFile> multipartFile);
 
     ResponseEntity<?> uploadVideosToCustomerProperty(String propertyId,List<MultipartFile> multipartFile);
+
+    User getLoginUserDetails();
 }

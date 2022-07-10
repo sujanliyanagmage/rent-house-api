@@ -150,7 +150,7 @@ public class PropertyServiceImpl implements PropertyService {
         return new ModelMapper();
     }
 
-    private User getLoginUserDetails() {
+    public User getLoginUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();

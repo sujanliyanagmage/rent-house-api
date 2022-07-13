@@ -11,4 +11,6 @@ public interface HouseRepository extends MongoRepository<House, String> {
     List<House> findHouseByRenter(String renterId, Pageable pageable);
 
     House findHouseById(String propertyId);
+
+    List<House> findAllByPropertyTypeLikeAndCityLike(String propertyType,String city);
 }

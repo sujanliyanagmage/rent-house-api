@@ -1,17 +1,16 @@
-package com.sns.core.model;
+package com.sns.core.dto;
 
-import com.sns.core.util.PropertyStatus;
+import com.sns.core.model.Appliance;
+import com.sns.core.model.Floor;
+import com.sns.core.model.Parking;
+import com.sns.core.model.RenteeRequest;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
-@Document(collection = "houses")
-public class House implements Serializable {
-    @Id
+public class HouseResponseDto implements Serializable {
     private String id;
     private String addressLine1;
     private String addressLine2;
@@ -26,11 +25,8 @@ public class House implements Serializable {
     private String contactName;
     private String email;
     private String phoneNo;
-    @DBRef
     private List<Appliance> appliances;
-    @DBRef
     private List<Floor> floors;
-    @DBRef
     private List<Parking> parkingTypes;
     private String listingSummery;
     private String payment;
@@ -41,41 +37,7 @@ public class House implements Serializable {
     private List<String> interestedRentees;
     private String refVideoLink;
     private Double valuePercentage;
-
-    public Date getPostedDate() {
-        return postedDate;
-    }
-
-    public void setPostedDate(Date postedDate) {
-        this.postedDate = postedDate;
-    }
-
-    public PropertyStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PropertyStatus status) {
-        this.status = status;
-    }
-
-    private Date postedDate;
-    private PropertyStatus status;
-
-    public String getRenter() {
-        return renter;
-    }
-
-    public void setRenter(String renter) {
-        this.renter = renter;
-    }
-
-    public List<String> getInterestedRentees() {
-        return interestedRentees;
-    }
-
-    public void setInterestedRentees(List<String> interestedRentees) {
-        this.interestedRentees = interestedRentees;
-    }
+    private List<RenteeRequest> matchingRentees;
 
     public String getId() {
         return id;
@@ -253,6 +215,22 @@ public class House implements Serializable {
         this.listingDescription = listingDescription;
     }
 
+    public String getRenter() {
+        return renter;
+    }
+
+    public void setRenter(String renter) {
+        this.renter = renter;
+    }
+
+    public List<String> getInterestedRentees() {
+        return interestedRentees;
+    }
+
+    public void setInterestedRentees(List<String> interestedRentees) {
+        this.interestedRentees = interestedRentees;
+    }
+
     public String getRefVideoLink() {
         return refVideoLink;
     }
@@ -267,5 +245,13 @@ public class House implements Serializable {
 
     public void setValuePercentage(Double valuePercentage) {
         this.valuePercentage = valuePercentage;
+    }
+
+    public List<RenteeRequest> getMatchingRentees() {
+        return matchingRentees;
+    }
+
+    public void setMatchingRentees(List<RenteeRequest> matchingRentees) {
+        this.matchingRentees = matchingRentees;
     }
 }

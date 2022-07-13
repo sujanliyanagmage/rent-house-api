@@ -4,6 +4,7 @@ import com.sns.core.dto.RenteeRequestDto;
 import com.sns.core.model.*;
 import com.sns.core.repository.*;
 import com.sns.core.service.PropertyService;
+import com.sns.core.service.PropertyValidationService;
 import com.sns.core.service.RenteeRequestService;
 import com.sns.core.util.PropertyStatus;
 import org.modelmapper.Conditions;
@@ -38,6 +39,9 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
 
     @Autowired
     private PropertyService propertyService;
+
+    @Autowired
+    private PropertyValidationService propertyValidationService;
 
     /**
      * Creates rentee request to search property.
@@ -79,6 +83,9 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
         if (parkings != null && parkings.size() > 0) {
             request.setParkingTypes(parkings);
         }
+
+        Double propertyValue = propertyValidationService.calculatePropertyValue(request);
+        request.setValuePercentage(propertyValue);
         return requestRepository.save(request);
     }
 }

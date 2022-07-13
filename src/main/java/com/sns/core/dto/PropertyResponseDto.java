@@ -14,14 +14,14 @@ public class PropertyResponseDto implements Serializable {
         this.pageCount = pageCount;
     }
 
-    public List<House> getData() {
+    public List<HouseResponseDto> getData() {
         return data;
     }
 
-    public void setData(List<House> data) {
+    public void setData(List<HouseResponseDto> data) {
         this.data = data;
     }
 
     private Integer pageCount;
-    private List<House> data;
+    private List<HouseResponseDto> data;
 }

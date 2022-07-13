@@ -34,6 +34,8 @@ public class RenteeRequest {
     private String payment;
     private Date postedDate;
     private PropertyStatus status;
+    private Double valuePercentage;
+
     public String getId() {
         return id;
     }
@@ -192,5 +194,13 @@ public class RenteeRequest {
 
     public void setStatus(PropertyStatus status) {
         this.status = status;
+    }
+
+    public Double getValuePercentage() {
+        return valuePercentage;
+    }
+
+    public void setValuePercentage(Double valuePercentage) {
+        this.valuePercentage = valuePercentage;
     }
 }

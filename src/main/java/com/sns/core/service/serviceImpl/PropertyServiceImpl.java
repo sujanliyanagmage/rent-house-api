@@ -1,11 +1,13 @@
 package com.sns.core.service.serviceImpl;
 
+import com.sns.core.dto.HouseResponseDto;
 import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.PropertyUpdateRequestDto;
 import com.sns.core.model.*;
 import com.sns.core.repository.*;
 import com.sns.core.service.PropertyService;
+import com.sns.core.service.PropertyValidationService;
 import com.sns.core.util.PropertyStatus;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
@@ -28,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -56,6 +59,12 @@ public class PropertyServiceImpl implements PropertyService {
     @Autowired
     private ApplianceRepository applianceRepository;
 
+    @Autowired
+    private PropertyValidationService propertyValidationService;
+
+    @Autowired
+    private RenteRequestRepository requestRepository;
+
     @Override
     public List<House> getHouseByRenterId(String renterId, Pageable pageable) {
         return houseRepository.findHouseByRenter(renterId, pageable);
@@ -67,7 +76,16 @@ public class PropertyServiceImpl implements PropertyService {
         Page<House> all = houseRepository.findAll(pageable);
         List<House> content = all.getContent();
         int totalPages = all.getTotalPages();
-        propertyResponseDto.setData(content);
+        List<HouseResponseDto> houseResponseDtos = new ArrayList<>();
+        content.forEach(property -> {
+            //find matching rentees..
+            List<RenteeRequest> rentees = findAllMatchiingRenteeRequests(property);
+            HouseResponseDto house = modelMapper.map(property, HouseResponseDto.class);
+            house.setMatchingRentees(rentees);
+            houseResponseDtos.add(house);
+        });
+
+        propertyResponseDto.setData(houseResponseDtos);
         propertyResponseDto.setPageCount(totalPages);
         return propertyResponseDto;
     }
@@ -100,6 +118,8 @@ public class PropertyServiceImpl implements PropertyService {
         if (parkings != null && parkings.size() > 0) {
             houseById.setParkingTypes(parkings);
         }
+        Double calculatePropertyValue = propertyValidationService.calculatePropertyValue(houseById);
+        houseById.setValuePercentage(calculatePropertyValue);
         return houseRepository.save(houseById);
     }
 
@@ -157,5 +177,18 @@ public class PropertyServiceImpl implements PropertyService {
             return userRepository.findByUsername(currentUserName);
         }
         throw new UsernameNotFoundException("--");
+    }
+
+    /**
+     * Collects matching rentees for given house based on location and property type.
+     *
+     * @param house
+     * @return
+     */
+    private List<RenteeRequest> findAllMatchiingRenteeRequests(House house) {
+        if (house.getPropertyType() != null && house.getCity() != null) {
+            return requestRepository.findAllByPropertyTypeLikeAndLocationsContains(house.getPropertyType(), house.getCity());
+        }
+        return new LinkedList<RenteeRequest>();
     }
 }

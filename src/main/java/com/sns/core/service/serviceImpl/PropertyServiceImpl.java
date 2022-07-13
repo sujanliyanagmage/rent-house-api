@@ -187,7 +187,7 @@ public class PropertyServiceImpl implements PropertyService {
      */
     private List<RenteeRequest> findAllMatchiingRenteeRequests(House house) {
         if (house.getPropertyType() != null && house.getCity() != null) {
-            return requestRepository.findAllByPropertyTypeLikeAndLocationsContains(house.getPropertyType(), house.getCity());
+            return requestRepository.findAllByPropertyTypeLikeIgnoreCaseAndLocationsLikeIgnoreCase(house.getPropertyType(), house.getCity());
         }
         return new LinkedList<RenteeRequest>();
     }

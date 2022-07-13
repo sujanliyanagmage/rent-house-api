@@ -10,7 +10,7 @@ public interface RenteRequestRepository extends MongoRepository<RenteeRequest, S
 
     RenteeRequest findRenteeRequestById(String id);
 
-    List<RenteeRequest> findAllByPropertyTypeLikeAndLocationsContains(String propertyType, String city);
+    List<RenteeRequest> findAllByPropertyTypeLikeIgnoreCaseAndLocationsLikeIgnoreCase(String propertyType, String city);
 
     List<RenteeRequest> findAllByRentee(String renteeId, Pageable pageable);
 }

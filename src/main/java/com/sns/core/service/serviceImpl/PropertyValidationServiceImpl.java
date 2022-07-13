@@ -56,7 +56,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      */
     private double calculateAppliancePercentage(List<Appliance> appliances) {
         int all = aplApplianceRepository.findAll().size();
-        return (100 / all) * appliances.size() * 0.1;
+        return appliances != null ? (100 / all) * appliances.size() * 0.1 : 0;
     }
 
     /**
@@ -66,7 +66,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateFloorPercentage(List<Floor> floors) {
-        return floors.size() > 0 ? 10 : 0;
+        return (floors != null && floors.size() > 0) ? 10 * 0.1: 0;
     }
 
     /**
@@ -76,7 +76,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateParkingPercentage(List<Parking> parking) {
-        return parking.size() > 0 ? 20 : 0;
+        return (parking != null && parking.size() > 0) ? 20 * 0.2 : 0;
     }
 
 
@@ -87,7 +87,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateBedRoomPercentage(Integer bedRooms) {
-        return bedRooms >= 4 ? 100 : (100 / 4) * bedRooms * 0.3;
+        return (bedRooms >= 4 ? 100 : (100 / 4) * bedRooms) * 0.3;
     }
 
 
@@ -98,6 +98,6 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateBathRoomPercentage(Integer bathRooms) {
-        return bathRooms >= 2 ? 100 : (100 / 2) * bathRooms * 0.3;
+        return (bathRooms >= 2 ? 100 : (100 / 2) * bathRooms ) * 0.3;
     }
 }

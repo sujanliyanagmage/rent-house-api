@@ -11,6 +11,7 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -54,6 +55,8 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
         RenteeRequest request = modelMapper.map(requestDto, RenteeRequest.class);
         request.setStatus(PropertyStatus.IN_PROGRESS);
         request.setPostedDate(new Date());
+        String userId = propertyService.getLoginUserDetails().getId();
+        request.setRentee(userId);
         return requestRepository.save(request);
     }
 
@@ -87,5 +90,10 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
         Double propertyValue = propertyValidationService.calculatePropertyValue(request);
         request.setValuePercentage(propertyValue);
         return requestRepository.save(request);
+    }
+
+    @Override
+    public List<RenteeRequest> findAllRenteeRequestById(String renteeId, Pageable pageable) {
+        return requestRepository.findAllByRentee(renteeId, pageable);
     }
 }

@@ -6,7 +6,10 @@ import com.sns.core.model.House;
 import com.sns.core.model.RenteeRequest;
 import com.sns.core.service.RenteeRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rentee_requests")
@@ -24,5 +27,10 @@ public class RenteeController {
     @PutMapping("/{requestId}")
     public RenteeRequest addProperty(@PathVariable String requestId, @RequestBody RenteeRequestDto requestDto) {
         return renteeRequestService.updateRenteeRequest(requestId, requestDto);
+    }
+
+    @GetMapping("/{renteeId}")
+    public List<RenteeRequest> getAllRenteeRequestByRenteeId(@PathVariable String renteeId, Pageable pageable) {
+        return renteeRequestService.findAllRenteeRequestById(renteeId, pageable);
     }
 }

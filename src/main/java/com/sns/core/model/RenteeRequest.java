@@ -35,6 +35,7 @@ public class RenteeRequest {
     private Date postedDate;
     private PropertyStatus status;
     private Double valuePercentage;
+    private String rentee;
 
     public String getId() {
         return id;
@@ -202,5 +203,13 @@ public class RenteeRequest {
 
     public void setValuePercentage(Double valuePercentage) {
         this.valuePercentage = valuePercentage;
+    }
+
+    public String getRentee() {
+        return rentee;
+    }
+
+    public void setRentee(String rentee) {
+        this.rentee = rentee;
     }
 }

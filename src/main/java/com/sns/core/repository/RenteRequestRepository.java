@@ -1,6 +1,7 @@
 package com.sns.core.repository;
 
 import com.sns.core.model.RenteeRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -12,5 +13,5 @@ public interface RenteRequestRepository extends MongoRepository<RenteeRequest, S
 
     List<RenteeRequest> findAllByPropertyTypeLikeIgnoreCaseAndLocationsLikeIgnoreCase(String propertyType, String city);
 
-    List<RenteeRequest> findAllByRentee(String renteeId, Pageable pageable);
+    Page<RenteeRequest> findAllByRentee(String renteeId, Pageable pageable);
 }

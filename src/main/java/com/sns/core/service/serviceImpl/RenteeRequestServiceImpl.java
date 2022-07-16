@@ -1,6 +1,8 @@
 package com.sns.core.service.serviceImpl;
 
 import com.sns.core.dto.RenteeRequestDto;
+import com.sns.core.dto.RenteeRequestResponseDto;
+import com.sns.core.dto.RequestResponseDto;
 import com.sns.core.model.*;
 import com.sns.core.repository.*;
 import com.sns.core.service.PropertyService;
@@ -11,9 +13,11 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -93,7 +97,21 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
     }
 
     @Override
-    public List<RenteeRequest> findAllRenteeRequestById(String renteeId, Pageable pageable) {
-        return requestRepository.findAllByRentee(renteeId, pageable);
+    public RenteeRequestResponseDto findAllRenteeRequestById(String renteeId, Pageable pageable) {
+        Page<RenteeRequest> allByRentee = requestRepository.findAllByRentee(renteeId, pageable);
+        List<RenteeRequest> content = allByRentee.getContent();
+        int totalPages = allByRentee.getTotalPages();
+        List<RequestResponseDto> responseDtos = new ArrayList<>();
+        content.forEach(rentee -> {
+            //find matching properties..TODO
+//            List<House> houses = findAllMatchiingProperties(rentee);
+            RequestResponseDto request = modelMapper.map(rentee, RequestResponseDto.class);
+            request.setMatchingProperties(new ArrayList<House>());
+            responseDtos.add(request);
+        });
+        RenteeRequestResponseDto dto = new RenteeRequestResponseDto();
+        dto.setData(responseDtos);
+        dto.setPageCount(allByRentee.getTotalPages());
+        return dto;
     }
 }

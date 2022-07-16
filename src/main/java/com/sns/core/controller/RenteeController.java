@@ -2,6 +2,7 @@ package com.sns.core.controller;
 
 import com.sns.core.dto.PropertyStageOneRequestDto;
 import com.sns.core.dto.RenteeRequestDto;
+import com.sns.core.dto.RenteeRequestResponseDto;
 import com.sns.core.model.House;
 import com.sns.core.model.RenteeRequest;
 import com.sns.core.service.RenteeRequestService;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rentee_requests")
-@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('RENTEE')" )
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('RENTEE')")
 public class RenteeController {
 
     @Autowired
@@ -33,7 +34,7 @@ public class RenteeController {
     }
 
     @GetMapping("/{renteeId}")
-    public List<RenteeRequest> getAllRenteeRequestByRenteeId(@PathVariable String renteeId, Pageable pageable) {
+    public RenteeRequestResponseDto getAllRenteeRequestByRenteeId(@PathVariable String renteeId, Pageable pageable) {
         return renteeRequestService.findAllRenteeRequestById(renteeId, pageable);
     }
 }

@@ -14,5 +14,5 @@ public interface HouseRepository extends MongoRepository<House, String> {
 
     List<House> findAllByPropertyTypeLikeAndCityLike(String propertyType,String city);
 
-    List<House> findAllByPropertyTypeLikeIgnoreCaseAndCityLikeIgnoreCase(String propertyType,List<String> cities);
+    List<House> findAllByPropertyTypeLikeIgnoreCaseAndCityInIgnoreCase(String propertyType,List<String> cities);
 }

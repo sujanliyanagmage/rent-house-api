@@ -156,7 +156,7 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
      */
     private List<House> findAllMatchiingProperties(RenteeRequest request) {
         if (request.getPropertyType() != null && request.getLocations() != null) {
-            return houseRepository.findAllByPropertyTypeLikeIgnoreCaseAndCityLikeIgnoreCase(request.getPropertyType(), request.getLocations());
+            return houseRepository.findAllByPropertyTypeLikeIgnoreCaseAndCityInIgnoreCase(request.getPropertyType(), request.getLocations());
         }
         return new LinkedList<>();
     }

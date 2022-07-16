@@ -6,7 +6,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.sns.core.dto.HouseResponseDto;
 import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
@@ -121,15 +120,15 @@ public class PropertyServiceImpl implements PropertyService {
         houseById.setRenter(userId);
 
         List<Floor> floors = floorRepository.findAllByIdIn(propertyDto.getFloors());
-        if (floors != null && floors.size() > 0) {
+        if (floors != null && !floors.isEmpty()) {
             houseById.setFloors(floors);
         }
         List<Appliance> appliances = applianceRepository.findAllByIdIn(propertyDto.getAppliances());
-        if (appliances != null && appliances.size() > 0) {
+        if (appliances != null && !appliances.isEmpty()) {
             houseById.setAppliances(appliances);
         }
         List<Parking> parkings = parkingRepository.findAllByIdIn(propertyDto.getParkingTypes());
-        if (parkings != null && parkings.size() > 0) {
+        if (parkings != null && !parkings.isEmpty()) {
             houseById.setParkingTypes(parkings);
         }
         Double calculatePropertyValue = propertyValidationService.calculatePropertyValue(houseById);
@@ -164,7 +163,7 @@ public class PropertyServiceImpl implements PropertyService {
             }
             //creates unique file name.
             String fileName = DateTime.now().toString(PREFIX) + file.getOriginalFilename();
-            PutObjectResult result = s3client.putObject(
+             s3client.putObject(
                     MATCH_RENTEE_IMAGES,
                     fileName, file1
             );
@@ -206,7 +205,7 @@ public class PropertyServiceImpl implements PropertyService {
             //creates unique file name.
             String fileName = DateTime.now().toString(PREFIX) + file.getOriginalFilename();
 
-            PutObjectResult result = s3client.putObject(
+             s3client.putObject(
                     MATCH_RENTEE_VIDEOS,
                     fileName, file1
             );
@@ -269,7 +268,7 @@ public class PropertyServiceImpl implements PropertyService {
         if (house.getPropertyType() != null && house.getCity() != null) {
             return requestRepository.findAllByPropertyTypeLikeIgnoreCaseAndLocationsLikeIgnoreCase(house.getPropertyType(), house.getCity());
         }
-        return new LinkedList<RenteeRequest>();
+        return new LinkedList<>();
     }
 
     /**
@@ -281,9 +280,9 @@ public class PropertyServiceImpl implements PropertyService {
      */
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
+        try (FileOutputStream fos = new FileOutputStream(convFile)) {
+            fos.write(file.getBytes());
+        }
         return convFile;
     }
 }

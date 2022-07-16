@@ -77,21 +77,20 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
      */
     @Override
     public RenteeRequest updateRenteeRequest(String requestId, RenteeRequestDto requestDto) {
-        String userId = propertyService.getLoginUserDetails().getId();
         RenteeRequest request = requestRepository.findRenteeRequestById(requestId);
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         modelMapper.map(requestDto, request);
 
         List<Floor> floors = floorRepository.findAllByIdIn(requestDto.getFloors());
-        if (floors != null && floors.size() > 0) {
+        if (floors != null && !floors.isEmpty()) {
             request.setFloors(floors);
         }
         List<Appliance> appliances = applianceRepository.findAllByIdIn(requestDto.getAppliances());
-        if (appliances != null && appliances.size() > 0) {
+        if (appliances != null && !appliances.isEmpty()) {
             request.setAppliances(appliances);
         }
         List<Parking> parkings = parkingRepository.findAllByIdIn(requestDto.getParkingTypes());
-        if (parkings != null && parkings.size() > 0) {
+        if (parkings != null && !parkings.isEmpty()) {
             request.setParkingTypes(parkings);
         }
 
@@ -159,6 +158,6 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
         if (request.getPropertyType() != null && request.getLocations() != null) {
             return houseRepository.findAllByPropertyTypeLikeIgnoreCaseAndCityLikeIgnoreCase(request.getPropertyType(), request.getLocations());
         }
-        return new LinkedList<House>();
+        return new LinkedList<>();
     }
 }

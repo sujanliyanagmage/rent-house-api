@@ -5,7 +5,7 @@ import com.sns.core.dto.RenteeRequestResponseDto;
 import com.sns.core.model.RenteeRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+
 
 public interface RenteeRequestService {
 
@@ -14,4 +14,6 @@ public interface RenteeRequestService {
     RenteeRequest updateRenteeRequest(String requestId, RenteeRequestDto requestDto);
 
     RenteeRequestResponseDto findAllRenteeRequestById(String renteeId, Pageable pageable);
+
+    RenteeRequestResponseDto findAllRenteeRequests(Pageable pageable);
 }

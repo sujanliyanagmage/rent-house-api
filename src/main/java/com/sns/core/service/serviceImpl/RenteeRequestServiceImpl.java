@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service("renteeService")
@@ -47,6 +48,9 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
 
     @Autowired
     private PropertyValidationService propertyValidationService;
+
+    @Autowired
+    private HouseRepository houseRepository;
 
     /**
      * Creates rentee request to search property.
@@ -91,27 +95,70 @@ public class RenteeRequestServiceImpl implements RenteeRequestService {
             request.setParkingTypes(parkings);
         }
 
-        Double propertyValue = propertyValidationService.calculatePropertyValue(request);
+        Double propertyValue = propertyValidationService.calculateRenteeRequestValue(request);
         request.setValuePercentage(propertyValue);
         return requestRepository.save(request);
     }
 
+    /**
+     * Gets all rentee request by rentee Id value.
+     *
+     * @param renteeId
+     * @param pageable
+     * @return list of requests.
+     */
     @Override
     public RenteeRequestResponseDto findAllRenteeRequestById(String renteeId, Pageable pageable) {
         Page<RenteeRequest> allByRentee = requestRepository.findAllByRentee(renteeId, pageable);
         List<RenteeRequest> content = allByRentee.getContent();
-        int totalPages = allByRentee.getTotalPages();
         List<RequestResponseDto> responseDtos = new ArrayList<>();
         content.forEach(rentee -> {
-            //find matching properties..TODO
-//            List<House> houses = findAllMatchiingProperties(rentee);
+            //find matching properties..
+            List<House> houses = findAllMatchiingProperties(rentee);
             RequestResponseDto request = modelMapper.map(rentee, RequestResponseDto.class);
-            request.setMatchingProperties(new ArrayList<House>());
+            request.setMatchingProperties(houses);
             responseDtos.add(request);
         });
         RenteeRequestResponseDto dto = new RenteeRequestResponseDto();
         dto.setData(responseDtos);
         dto.setPageCount(allByRentee.getTotalPages());
         return dto;
+    }
+
+    /**
+     * Gets all rentee requests.
+     *
+     * @param pageable
+     * @return list of rentee requests.
+     */
+    @Override
+    public RenteeRequestResponseDto findAllRenteeRequests(Pageable pageable) {
+        Page<RenteeRequest> allByRentee = requestRepository.findAll(pageable);
+        List<RenteeRequest> content = allByRentee.getContent();
+        List<RequestResponseDto> responseDtos = new ArrayList<>();
+        content.forEach(rentee -> {
+            //find matching properties..
+            List<House> houses = findAllMatchiingProperties(rentee);
+            RequestResponseDto request = modelMapper.map(rentee, RequestResponseDto.class);
+            request.setMatchingProperties(houses);
+            responseDtos.add(request);
+        });
+        RenteeRequestResponseDto dto = new RenteeRequestResponseDto();
+        dto.setData(responseDtos);
+        dto.setPageCount(allByRentee.getTotalPages());
+        return dto;
+    }
+
+    /**
+     * Find all matching properties for the rentee's request.
+     *
+     * @param request
+     * @return List of properties.
+     */
+    private List<House> findAllMatchiingProperties(RenteeRequest request) {
+        if (request.getPropertyType() != null && request.getLocations() != null) {
+            return houseRepository.findAllByPropertyTypeLikeIgnoreCaseAndCityLikeIgnoreCase(request.getPropertyType(), request.getLocations());
+        }
+        return new LinkedList<House>();
     }
 }

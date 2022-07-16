@@ -2,7 +2,6 @@ package com.sns.core.service.serviceImpl;
 
 import com.sns.core.model.*;
 import com.sns.core.repository.ApplianceRepository;
-import com.sns.core.repository.HouseRepository;
 import com.sns.core.service.PropertyValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return : calculated value.
      */
     @Override
-    public Double calculatePropertyValue(RenteeRequest request) {
+    public Double calculateRenteeRequestValue(RenteeRequest request) {
         double requestValue = calculateAppliancePercentage(request.getAppliances()) +
                 calculateFloorPercentage(request.getFloors()) +
                 calculateParkingPercentage(request.getParkingTypes()) +
@@ -87,7 +86,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateBedRoomPercentage(Integer bedRooms) {
-        return (bedRooms >= 4 ? 100 : (100 / 4) * bedRooms) * 0.3;
+        return ((bedRooms != null && bedRooms >= 4 ) ? 100 : (100 / 4) * bedRooms) * 0.3;
     }
 
 
@@ -98,6 +97,6 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateBathRoomPercentage(Integer bathRooms) {
-        return (bathRooms >= 2 ? 100 : (100 / 2) * bathRooms ) * 0.3;
+        return ((bathRooms !=null && bathRooms >= 2 )? 100 : (100 / 2) * bathRooms ) * 0.3;
     }
 }

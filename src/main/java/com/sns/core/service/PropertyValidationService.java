@@ -19,5 +19,5 @@ public interface PropertyValidationService {
      * @param request
      * @return : calculated value.
      */
-    Double calculatePropertyValue(RenteeRequest request);
+    Double calculateRenteeRequestValue(RenteeRequest request);
 }

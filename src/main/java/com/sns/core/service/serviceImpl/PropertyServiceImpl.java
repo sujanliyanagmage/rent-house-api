@@ -1,5 +1,12 @@
 package com.sns.core.service.serviceImpl;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.sns.core.dto.HouseResponseDto;
 import com.sns.core.dto.PropertyResponseDto;
 import com.sns.core.dto.PropertyStageOneRequestDto;
@@ -9,6 +16,7 @@ import com.sns.core.repository.*;
 import com.sns.core.service.PropertyService;
 import com.sns.core.service.PropertyValidationService;
 import com.sns.core.util.PropertyStatus;
+import org.joda.time.DateTime;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +33,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +49,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     public static final String VIDEO = "Video";
     public static final String IMAGE = "Image";
+    public static final String MATCH_RENTEE_IMAGES = "match-rentee-images";
+    public static final String PREFIX = "yyyyMMddHHmmss";
+    public static final String MATCH_RENTEE_VIDEOS = "match-rentee-videos";
     @Autowired
     private HouseRepository houseRepository;
 
@@ -126,19 +140,85 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public ResponseEntity<?> uploadImagesToCustomerProperty(String propertyId, List<MultipartFile> multipartFile) {
 
-        User loginUserDetails = getLoginUserDetails();
-        String path = loginUserDetails.getId() + "\\" + propertyId + "\\images\\";
-        uploadFiles(path, IMAGE, propertyId, multipartFile);
-        return ResponseEntity.ok("File uploaded successfully.");
+        //upload to S3 file
+        AWSCredentials credentials = new BasicAWSCredentials(
+                "AKIA3TJ6OKOX2JEQJUHW",
+                "06J+3vho0Ne4+XbQAUqCxf789ODbr42icxtANprL"
+        );
+
+        AmazonS3 s3client = AmazonS3ClientBuilder
+                .standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(Regions.US_EAST_1)
+                .build();
+        if (!s3client.doesBucketExist(MATCH_RENTEE_IMAGES)) {
+            s3client.createBucket(MATCH_RENTEE_IMAGES);
+        }
+        List<String> imageUrls = new ArrayList<>();
+        multipartFile.forEach(file -> {
+            File file1 = null;
+            try {
+                file1 = convertMultiPartToFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //creates unique file name.
+            String fileName = DateTime.now().toString(PREFIX) + file.getOriginalFilename();
+            PutObjectResult result = s3client.putObject(
+                    MATCH_RENTEE_IMAGES,
+                    fileName, file1
+            );
+            URL url = s3client.getUrl(MATCH_RENTEE_IMAGES, fileName);
+            imageUrls.add(String.valueOf(url));
+        });
+
+        House houseById = houseRepository.findHouseById(propertyId);
+        houseById.setPhotosPath(imageUrls);
+        houseRepository.save(houseById);
+        return ResponseEntity.ok("Image file uploaded successfully.");
     }
 
     @Override
     public ResponseEntity<?> uploadVideosToCustomerProperty(String propertyId, List<MultipartFile> multipartFile) {
 
-        User loginUserDetails = getLoginUserDetails();
-        String path = loginUserDetails.getId() + "\\" + propertyId + "\\videos\\";
-        uploadFiles(path, VIDEO, propertyId, multipartFile);
-        return ResponseEntity.ok("File uploaded successfully.");
+        //upload to S3 file
+        AWSCredentials credentials = new BasicAWSCredentials(
+                env.getProperty("aws.s3.key", "AKIA3TJ6OKOX2JEQJUHW"),
+                env.getProperty("aws.s3.value", "06J+3vho0Ne4+XbQAUqCxf789ODbr42icxtANprL")
+        );
+
+        AmazonS3 s3client = AmazonS3ClientBuilder
+                .standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(Regions.US_EAST_1)
+                .build();
+        if (!s3client.doesBucketExist(MATCH_RENTEE_VIDEOS)) {
+            s3client.createBucket(MATCH_RENTEE_VIDEOS);
+        }
+        List<String> videoUrls = new ArrayList<>();
+        multipartFile.forEach(file -> {
+            File file1 = null;
+            try {
+                file1 = convertMultiPartToFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //creates unique file name.
+            String fileName = DateTime.now().toString(PREFIX) + file.getOriginalFilename();
+
+            PutObjectResult result = s3client.putObject(
+                    MATCH_RENTEE_VIDEOS,
+                    fileName, file1
+            );
+            URL url = s3client.getUrl(MATCH_RENTEE_VIDEOS, fileName);
+            videoUrls.add(String.valueOf(url));
+        });
+
+        House houseById = houseRepository.findHouseById(propertyId);
+        houseById.setVideosPath(videoUrls);
+        houseRepository.save(houseById);
+
+        return ResponseEntity.ok("Video file uploaded successfully.");
     }
 
     private void uploadFiles(String path, String uploadType, String propertyId, List<MultipartFile> multipartFile) {
@@ -190,5 +270,20 @@ public class PropertyServiceImpl implements PropertyService {
             return requestRepository.findAllByPropertyTypeLikeIgnoreCaseAndLocationsLikeIgnoreCase(house.getPropertyType(), house.getCity());
         }
         return new LinkedList<RenteeRequest>();
+    }
+
+    /**
+     * converts given multipart file to file type.
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
     }
 }

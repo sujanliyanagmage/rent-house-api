@@ -79,8 +79,23 @@ public class PropertyServiceImpl implements PropertyService {
     private RenteRequestRepository requestRepository;
 
     @Override
-    public List<House> getHouseByRenterId(String renterId, Pageable pageable) {
-        return houseRepository.findHouseByRenter(renterId, pageable);
+    public PropertyResponseDto getHouseByRenterId(String renterId, Pageable pageable) {
+        PropertyResponseDto propertyResponseDto = new PropertyResponseDto();
+        Page<House> all = houseRepository.findHouseByRenter(renterId, pageable);
+        List<House> content = all.getContent();
+        int totalPages = all.getTotalPages();
+        List<HouseResponseDto> houseResponseDtos = new ArrayList<>();
+        content.forEach(property -> {
+            //find matching rentees..
+            List<RenteeRequest> rentees = findAllMatchiingRenteeRequests(property);
+            HouseResponseDto house = modelMapper.map(property, HouseResponseDto.class);
+            house.setMatchingRentees(rentees);
+            houseResponseDtos.add(house);
+        });
+
+        propertyResponseDto.setData(houseResponseDtos);
+        propertyResponseDto.setPageCount(totalPages);
+        return propertyResponseDto;
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface PropertyService {
 
-    List<House> getHouseByRenterId(String renterId, Pageable pageable);
+    PropertyResponseDto getHouseByRenterId(String renterId, Pageable pageable);
 
     PropertyResponseDto getAllHouses(Pageable pageable);
 

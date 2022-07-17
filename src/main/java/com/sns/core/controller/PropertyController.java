@@ -22,7 +22,7 @@ public class PropertyController {
     private PropertyService propertyService;
 
     @GetMapping("/{renterId}")
-    public List<House> getAllPropertiesByRenterId(@PathVariable String renterId, Pageable pageable) {
+    public PropertyResponseDto getAllPropertiesByRenterId(@PathVariable String renterId, Pageable pageable) {
         return propertyService.getHouseByRenterId(renterId, pageable);
     }
 

@@ -86,7 +86,7 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateBedRoomPercentage(Integer bedRooms) {
-        return ((bedRooms != null && bedRooms >= 4 ) ? 100 : ((bedRooms != null)? ((100 / 4) * bedRooms) * 0.3:0));
+        return ((bedRooms != null && bedRooms >= 4 ) ? 30 : ((bedRooms != null)? ((100 / 4) * bedRooms) * 0.3:0));
     }
 
 
@@ -97,6 +97,6 @@ public class PropertyValidationServiceImpl implements PropertyValidationService 
      * @return
      */
     private double calculateBathRoomPercentage(Integer bathRooms) {
-        return ((bathRooms !=null && bathRooms >= 2 )? 100 : ((bathRooms !=null)?((100 / 2) * bathRooms ) * 0.3:0));
+        return ((bathRooms !=null && bathRooms >= 2 )? 30 : ((bathRooms !=null)?((100 / 2) * bathRooms ) * 0.3:0));
     }
 }

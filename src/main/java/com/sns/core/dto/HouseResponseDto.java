@@ -4,8 +4,7 @@ import com.sns.core.model.Appliance;
 import com.sns.core.model.Floor;
 import com.sns.core.model.Parking;
 import com.sns.core.model.RenteeRequest;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import com.sns.core.util.PropertyStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -40,6 +39,7 @@ public class HouseResponseDto implements Serializable {
     private Double valuePercentage;
     private List<RenteeRequest> matchingRentees;
     private Date postedDate;
+    private PropertyStatus status;
 
     public String getId() {
         return id;
@@ -263,5 +263,13 @@ public class HouseResponseDto implements Serializable {
 
     public void setPostedDate(Date postedDate) {
         this.postedDate = postedDate;
+    }
+
+    public PropertyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PropertyStatus status) {
+        this.status = status;
     }
 }

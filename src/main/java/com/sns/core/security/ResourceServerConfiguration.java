@@ -20,7 +20,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-				.authorizeRequests().antMatchers("/uploads/files/").permitAll().antMatchers("/api/v1/employeeProfile").permitAll().antMatchers("/api/v1/articleFilter").permitAll().antMatchers("/api/v1/publicMessage").permitAll().anyRequest().authenticated();
+				.authorizeRequests().antMatchers("/uploads/files/").permitAll().antMatchers("/api/v1/employeeProfile").permitAll().antMatchers("/api/v1/articleFilter").permitAll().antMatchers("/api/v1/publicMessage").permitAll().antMatchers("/users/user").permitAll().anyRequest().authenticated();
 
 	}
 }

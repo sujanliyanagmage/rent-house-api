@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class HouseResponseDto implements Serializable {
@@ -38,6 +39,7 @@ public class HouseResponseDto implements Serializable {
     private String refVideoLink;
     private Double valuePercentage;
     private List<RenteeRequest> matchingRentees;
+    private Date postedDate;
 
     public String getId() {
         return id;
@@ -253,5 +255,13 @@ public class HouseResponseDto implements Serializable {
 
     public void setMatchingRentees(List<RenteeRequest> matchingRentees) {
         this.matchingRentees = matchingRentees;
+    }
+
+    public Date getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(Date postedDate) {
+        this.postedDate = postedDate;
     }
 }
